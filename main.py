@@ -22,7 +22,7 @@ if __name__ == '__main__':
     # select subregion (on same cropped raster) to re-crop mesh
     bbox = roi2box("cut.tif")
     # clip mesh for subregion
-    cut_mesh(mesh_in=mesh_path, bbox=bbox, mesh_out='mesh_cut.ply')
+    cut_mesh(mesh_in=mesh_path, bounds=bbox, mesh_out='mesh_cut.ply')
 
     # read and visualize resulting mesh
     grid = pv.read('mesh_cut.ply')

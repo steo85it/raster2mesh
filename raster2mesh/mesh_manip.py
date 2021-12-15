@@ -58,7 +58,8 @@ def cut_mesh(mesh_in, mesh_out, bbox=None, bounds=[]):
 
     # check out input bounding box
     if bbox != None:
-        xx0, xx1, yy0, yy1 = bbox.bounds
+        print("# Sometimes y and x are messed up, safer to pass [xmin, xmax, ymin, ymax] directly.")
+        xx0, yy0, xx1, yy1 = bbox.bounds
     elif len(bounds) == 4:
         xx0, xx1, yy0, yy1 = bounds
     else:

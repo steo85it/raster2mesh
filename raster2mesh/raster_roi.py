@@ -93,9 +93,9 @@ def roi2pcd(raster_in, raster_out=None):
     return surface_pcd
 
 
-# generate Shapely.box of region selected on raster
+# generate (xmin, xmax, ymin, ymax) of region selected on raster
 def roi2box(raster_in):
-    from shapely.geometry import box
+    # from shapely.geometry import box
 
     start = time.time()
 
@@ -104,10 +104,11 @@ def roi2box(raster_in):
     ds = xr.open_dataset(raster_in, engine="rasterio")
 
     # select region of interest and produce box
-    roi_coords = select_roi(ds, resample=0.1)
-    bbox = box(np.min(roi_coords[:, 0]), np.max(roi_coords[:, 0]), np.min(roi_coords[:, 1]), np.max(roi_coords[:, 1]))
+    roi_coords = select_roi(ds, resample=0.3)
+    # bbox = box(np.min(roi_coords[:, 0]), np.max(roi_coords[:, 0]), np.min(roi_coords[:, 1]), np.max(roi_coords[:, 1])) # sometimes this messes up coords
+    xmin, xmax, ymin, ymax = np.min(roi_coords[:, 0]), np.max(roi_coords[:, 0]), np.min(roi_coords[:, 1]), np.max(roi_coords[:, 1])
 
     end = time.time()
-    print(f"- Shapely.box of the selected region generated after {int(end - start)} seconds.")
+    print(f"- Bounding box [xmin, xmax, ymin, ymax] of the selected region generated after {int(end - start)} seconds.")
 
-    return bbox
+    return xmin, xmax, ymin, ymax
