@@ -1,0 +1,8 @@
+matplotlib>=3.3.3
+meshio>=4.3.5
+numpy>=1.19.4
+pyvista>=0.28.1
+xarray[io]
+rioxarray
+open3d
+shapely
