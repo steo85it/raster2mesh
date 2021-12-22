@@ -26,6 +26,7 @@ def pcd2mesh(surface_pcd, mesh_out, resolution, method="Poisson"):
         p_mesh_crop = poisson_mesh.crop(bbox)
 
         o3d.io.write_triangle_mesh(mesh_out, p_mesh_crop)
+        nfaces = np.asarray(p_mesh_crop.triangles).shape[0]
 
     elif method == "BPA":  # very slow for large meshes + not multi-threaded
         distances = pcd.compute_nearest_neighbor_distance()
@@ -42,13 +43,14 @@ def pcd2mesh(surface_pcd, mesh_out, resolution, method="Poisson"):
         dec_mesh.remove_non_manifold_edges()
 
         o3d.io.write_triangle_mesh(mesh_out, dec_mesh)
+        nfaces = np.asarray(dec_mesh.triangles).shape[0]
 
     else:
         print("* Unknown mesh-ify method, options are 'Poisson' or 'BPA'. Exit.")
         exit(1)
 
     end = time.time()
-    print(f"- Mesh written to {mesh_out} after {int(end - start)} seconds.")
+    print(f"- Mesh ({nfaces} faces) written to {mesh_out} after {int(end - start)} seconds.")
 
 
 # cut mesh based on bounding box
@@ -85,4 +87,4 @@ def cut_mesh(mesh_in, mesh_out, bbox=None, bounds=[]):
     mesh = meshio.Mesh(V, [('triangle', F_new)])
     mesh.write(mesh_out)
 
-    print(f"- {mesh_in} cropped and written to {mesh_out}.")
+    print(f"- {mesh_in} ({F_new.shape[0]} faces) cropped and written to {mesh_out}.")

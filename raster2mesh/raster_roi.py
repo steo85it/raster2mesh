@@ -43,6 +43,8 @@ def select_roi(xr_dataset, resample=1.0):
     ds_downsampled[data_name].plot()
     coords = []
     binding_id = plt.connect('button_press_event', on_click)
+    plt.title("Click 4 times to select the vertices of the ROI quadrangle.")
+    plt.tight_layout()
     plt.show()
 
     return np.array(coords)
@@ -60,7 +62,7 @@ def roi2pcd(raster_in, raster_out=None):
     data_name = list(ds.data_vars.keys())[0]
 
     # selected coordinates are used to clip initial raster (we need a box, but clip_box gives issues - workaround)
-    coords = select_roi(ds, resample=0.3)
+    coords = select_roi(ds, resample=0.1)
     xmin, xmax, ymin, ymax = np.min(coords[:, 0]), np.max(coords[:, 0]), np.min(coords[:, 1]), np.max(coords[:, 1])
     geometries = [
         {
@@ -104,7 +106,7 @@ def roi2box(raster_in):
     ds = xr.open_dataset(raster_in, engine="rasterio")
 
     # select region of interest and produce box
-    roi_coords = select_roi(ds, resample=0.3)
+    roi_coords = select_roi(ds, resample=0.1)
     # bbox = box(np.min(roi_coords[:, 0]), np.max(roi_coords[:, 0]), np.min(roi_coords[:, 1]), np.max(roi_coords[:, 1])) # sometimes this messes up coords
     xmin, xmax, ymin, ymax = np.min(roi_coords[:, 0]), np.max(roi_coords[:, 0]), np.min(roi_coords[:, 1]), np.max(roi_coords[:, 1])
 
